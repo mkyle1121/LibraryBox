@@ -1,21 +1,17 @@
 ﻿using Microsoft.Azure.Cosmos;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LibraryBox
 {
     public class Cosmos
     {        
-        private static readonly ConnectionStringSettings cosmosKey = ConfigurationManager.ConnectionStrings["cosmosKey"];
-        private static readonly ConnectionStringSettings cosmosContainer = ConfigurationManager.ConnectionStrings["cosmosContainer"];
-        private static readonly ConnectionStringSettings cosmosDatabase = ConfigurationManager.ConnectionStrings["cosmosDatabase"];
-        private static readonly ConnectionStringSettings cosmosEndpointUri = ConfigurationManager.ConnectionStrings["cosmosEndpointUri"];        
+        private readonly ConnectionStringSettings cosmosKey = ConfigurationManager.ConnectionStrings["cosmosKey"];
+        private readonly ConnectionStringSettings cosmosContainer = ConfigurationManager.ConnectionStrings["cosmosContainer"];
+        private readonly ConnectionStringSettings cosmosDatabase = ConfigurationManager.ConnectionStrings["cosmosDatabase"];
+        private readonly ConnectionStringSettings cosmosEndpointUri = ConfigurationManager.ConnectionStrings["cosmosEndpointUri"];        
         private CosmosClient cosmosClient;
         private Container container;
         

@@ -12,12 +12,15 @@ namespace LibraryBox
         {
             var client = new HttpClient();
             var cosmos = new Cosmos();
+            var lcd = new LCD();
 
             while (true)
             {
+                //lcd.LCDStartup();
                 Console.WriteLine("Please Enter An ISBN: ");
                 string ISBNInput = Console.ReadLine();
-                //ISBNInput = "0393325350";
+                
+                
                 if (string.IsNullOrEmpty(ISBNInput))
                 {
                     Console.WriteLine("Please Enter An ISBN And Try Again.");
