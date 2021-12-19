@@ -43,7 +43,6 @@ namespace LibraryBox
                             ISBNInput += conKeyInfo.KeyChar;
                             break;
                     }
-                    lcd.ClearBottomText();
                     lcd.WriteBottomText(ISBNInput);
                 }
                 conKeyInfo = default(ConsoleKeyInfo);
@@ -141,7 +140,7 @@ namespace LibraryBox
             }
             else if(apiResponse.StatusCode == HttpStatusCode.Conflict)
             {
-                Console.WriteLine("Book Exists.");
+                Console.WriteLine("Book Exists.");                
                 lcd.WriteBottomText("Book Exists");
                 await Task.Delay(3000);
                 lcd.ClearBottomText();
@@ -186,7 +185,6 @@ namespace LibraryBox
         }
         private static void OnButtonChange(object sender, EventArgs args)
         {
-            lcd.ClearTopText();
             lcd.WriteTopText(button.state.ToString());
         }
     }
