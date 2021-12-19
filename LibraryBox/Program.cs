@@ -10,73 +10,116 @@ namespace LibraryBox
 {
     class Program
     {
+        private static readonly string azureFunctionBaseEndpoint = ConfigurationManager.AppSettings.Get("AzureFunctionBaseEndpoint");
         private static readonly string isbnRetrievalEndpoint = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
         private static readonly string azureFunctionApiKey = ConfigurationManager.AppSettings.Get("AzureFunctionApiKey");
-        private static readonly string azureFunctionBaseEndpoint = ConfigurationManager.AppSettings.Get("AzureFunctionBaseEndpoint");
-        private static readonly string street = ConfigurationManager.AppSettings.Get("Street");
+        private static readonly string street = ConfigurationManager.AppSettings.Get("Street");       
+        private static LCD lcd;
+        private static Button button;
+        
         static async Task Main()
         {
+            lcd = new LCD();
+            button = new Button();
+            button.ButtonChange += OnButtonChange;
+            Task buttonPress = button.ButtonPress();
+            ConsoleKeyInfo conKeyInfo = new ConsoleKeyInfo();
 
-            await DeleteBookById("9295055020", street);
-
-            //var lcd = new LCD();
-            
-            
-            while (true)
-            {               
-                Console.WriteLine("Please Enter An ISBN: ");
-                string ISBNInput = Console.ReadLine();             
-                if (string.IsNullOrEmpty(ISBNInput))
+            while(true)
+            {
+                lcd.WriteTopText(button.state.ToString());
+                string ISBNInput = string.Empty;
+                while(conKeyInfo.Key != ConsoleKey.Enter)
                 {
-                    Console.WriteLine("Please Enter An ISBN And Try Again.");
+                    conKeyInfo = Console.ReadKey();
+                    switch (conKeyInfo.Key)
+                    {
+                        case ConsoleKey.Enter:
+                            continue;
+                        case ConsoleKey.Backspace:
+                            ISBNInput = ISBNInput.Remove(ISBNInput.Length - 1);                            
+                            break;
+                        default:
+                            ISBNInput += conKeyInfo.KeyChar;
+                            break;
+                    }
+                    lcd.ClearBottomText();
+                    lcd.WriteBottomText(ISBNInput);
+                }
+                conKeyInfo = default(ConsoleKeyInfo);
+
+                if(string.IsNullOrEmpty(ISBNInput))
+                {
+                    Console.WriteLine("Empty, Try Again.");
+                    lcd.WriteBottomText("Empty, Try Again");
+                    await Task.Delay(3000);
+                    lcd.ClearBottomText();
                     continue;
                 }
                 ISBNInput = ISBNInput.Replace("-", "");
 
+                switch(button.state.ToString())
+                {
+                    case "DEPOSIT":
+                        await StartToCreateBook(ISBNInput);
+                        break;
+                    case "WITHDRAW":
 
-                string content = string.Empty;
-                try
-                {
-                    HttpClient client = new HttpClient();
-                    HttpResponseMessage response = await client.GetAsync($"{isbnRetrievalEndpoint}{ISBNInput}");
-                    response.EnsureSuccessStatusCode();
-                    content = await response.Content.ReadAsStringAsync();
-                }
-                catch (HttpRequestException ex)
-                {
-                    Console.WriteLine("Unable To Request Book Information.");
-                    Console.WriteLine(ex.Message);
-                    continue;
-                }                
-                
-                JObject parsedContent = JObject.Parse(content);
-                Console.WriteLine(parsedContent);
-                
-                JToken parsedBook;
-                string totalItems = parsedContent["totalItems"].ToString();
-                if (totalItems == "0")
-                {
-                    Console.WriteLine("Could Not Find Book.  Please Try Again.");
-                    continue;
-                }
-                else
-                {                    
-                    parsedBook = parsedContent["items"][0]["volumeInfo"];
-                }                
-
-                Book book = new Book
-                {
-                    id = ISBNInput,
-                    author = parsedBook["authors"][0].ToString(),
-                    title = parsedBook["title"].ToString(),
-                    isbn = ISBNInput,
-                    date = DateTime.Now.ToShortDateString(),
-                    street = street
-                };           
-
-                await CreateBook(book);
+                        await DeleteBookById(ISBNInput, street);
+                        break;
+                    default:
+                        Console.WriteLine("Cannot Determine Button State.");
+                        break;
+                }               
+            }           
+        }              
+        private static async Task StartToCreateBook(string ISBNInputCreate)
+        {
+            string content = string.Empty;
+            try
+            {
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync($"{isbnRetrievalEndpoint}{ISBNInputCreate}");
+                response.EnsureSuccessStatusCode();
+                content = await response.Content.ReadAsStringAsync();
             }
-            
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine("Error Requesting Book Information.");
+                Console.WriteLine(ex.Message);
+                lcd.WriteBottomText("Error Retrieving");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
+                return;
+            }
+            JObject parsedContent = JObject.Parse(content);
+
+            JToken parsedBook;
+            string totalItems = parsedContent["totalItems"].ToString();
+            if(totalItems == "0")
+            {
+                Console.WriteLine("Book Not Found.");
+                lcd.WriteBottomText("Book Not Found");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
+                return;
+            }
+            else
+            {
+                parsedBook = parsedContent["items"][0]["volumeInfo"];
+            }
+
+            Book book = new Book
+            {
+                id = ISBNInputCreate,
+                author = parsedBook["authors"][0].ToString(),
+                title = parsedBook["title"].ToString(),
+                isbn = ISBNInputCreate,
+                date = DateTime.Now.ToShortDateString(),
+                street = street
+            };
+
+            await CreateBook(book);            
         }
 
         private static async Task CreateBook(Book book)
@@ -89,17 +132,27 @@ namespace LibraryBox
             HttpContent httpContent = new StringContent(bookContent);
             HttpClient client = new HttpClient();            
             HttpResponseMessage apiResponse = await client.PostAsync(apiEndpointCreateBook, httpContent);
-            if(apiResponse.StatusCode == HttpStatusCode.Created)
+            if(apiResponse.StatusCode == HttpStatusCode.OK)
             {
-                Console.WriteLine("Book Created.");
+                Console.WriteLine("Book Deposited!");
+                lcd.WriteBottomText("Book Deposited!");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
+
             }
             else if(apiResponse.StatusCode == HttpStatusCode.InternalServerError)
             {
                 Console.WriteLine("Internal Server Error.");
+                lcd.WriteBottomText("Server Error");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
             }
             else
             {
                 Console.WriteLine("Error Creating Book.");
+                lcd.WriteBottomText("Error Creating");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
             }
         }
 
@@ -112,17 +165,30 @@ namespace LibraryBox
             if(apiResponse.StatusCode == HttpStatusCode.OK)
             {
                 Console.WriteLine("Book Deleted.");
+                lcd.WriteBottomText("Book Withdrawn!");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
+
             }
             else if(apiResponse.StatusCode == HttpStatusCode.NotFound)
             {
                 Console.WriteLine("Book Not Found.");
-            } 
+                lcd.WriteBottomText("Book Not Found");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
+            }
             else
             {
                 Console.WriteLine("Error Deleting Book.");
+                lcd.WriteBottomText("Error Deleting");
+                await Task.Delay(3000);
+                lcd.ClearBottomText();
             }
         }
-
-
+        private static void OnButtonChange(object sender, EventArgs args)
+        {
+            lcd.ClearTopText();
+            lcd.WriteTopText(button.state.ToString());
+        }
     }
 }
