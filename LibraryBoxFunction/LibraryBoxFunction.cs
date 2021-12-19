@@ -14,17 +14,20 @@ namespace LibraryBoxFunction
 {
     public static class LibraryBoxFunction
     {
+        static string cosmosConnectionString = Environment.GetEnvironmentVariable("CosmosConnectionString");
+        static string cosmosContainer = Environment.GetEnvironmentVariable("CosmosContainer");
+        static string cosmosDatabase = Environment.GetEnvironmentVariable("CosmosDatabase");
+
         [FunctionName("GetBookById")]
         public static async Task<IActionResult> GetBookById(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {            
-            string cosmosConnectionString = Environment.GetEnvironmentVariable("CosmosConnectionString");
 
             string id = req.Query["id"];
             string partitionKey = req.Query["partitionKey"];
 
             CosmosClient client = new CosmosClient(cosmosConnectionString);
-            Container container = client.GetContainer("librarybox", "librarybox");
+            Container container = client.GetContainer(cosmosDatabase, cosmosContainer);
 
             try
             {
@@ -42,13 +45,11 @@ namespace LibraryBoxFunction
         public static async Task<IActionResult> DeleteBookById(
         [HttpTrigger(AuthorizationLevel.Function, "delete", Route = null)] HttpRequest req, ILogger log)        
         {
-            string cosmosConnectionString = Environment.GetEnvironmentVariable("CosmosConnectionString");
-
             string id = req.Query["id"];
             string partitionKey = req.Query["partitionKey"];
 
             CosmosClient client = new CosmosClient(cosmosConnectionString);
-            Container container = client.GetContainer("librarybox", "librarybox");
+            Container container = client.GetContainer(cosmosDatabase, cosmosContainer);
 
             try
             {
@@ -65,33 +66,30 @@ namespace LibraryBoxFunction
         public static async Task<IActionResult> CreateBook(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
-            string cosmosConnectionString = Environment.GetEnvironmentVariable("CosmosConnectionString");
-
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             Book book = JsonConvert.DeserializeObject<Book>(requestBody);                     
 
             CosmosClient client = new CosmosClient(cosmosConnectionString);
-            Container container = client.GetContainer("librarybox", "librarybox");
+            Container container = client.GetContainer(cosmosDatabase, cosmosContainer);
 
             try
             {
                 ItemResponse<Book> response = await container.CreateItemAsync<Book>(book, new PartitionKey(book.street));
-                return new OkResult();
+                return new StatusCodeResult(201);
             }
-            catch (CosmosException ex)
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
             {                
-                return new StatusCodeResult(500);
+                return new StatusCodeResult(409);
             }
+
         }
 
         [FunctionName("GetAllBooks")]
         public static async Task<IActionResult> GetAllBooks(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
-            string cosmosConnectionString = Environment.GetEnvironmentVariable("CosmosConnectionString");            
-
             CosmosClient client = new CosmosClient(cosmosConnectionString);
-            Container container = client.GetContainer("librarybox", "librarybox");
+            Container container = client.GetContainer(cosmosDatabase, cosmosContainer);
 
             try
             {

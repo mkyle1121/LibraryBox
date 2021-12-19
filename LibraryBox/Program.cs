@@ -64,7 +64,6 @@ namespace LibraryBox
                         await StartToCreateBook(ISBNInput);
                         break;
                     case "WITHDRAW":
-
                         await DeleteBookById(ISBNInput, street);
                         break;
                     default:
@@ -132,7 +131,7 @@ namespace LibraryBox
             HttpContent httpContent = new StringContent(bookContent);
             HttpClient client = new HttpClient();            
             HttpResponseMessage apiResponse = await client.PostAsync(apiEndpointCreateBook, httpContent);
-            if(apiResponse.StatusCode == HttpStatusCode.OK)
+            if(apiResponse.StatusCode == HttpStatusCode.Created)
             {
                 Console.WriteLine("Book Deposited!");
                 lcd.WriteBottomText("Book Deposited!");
@@ -140,10 +139,10 @@ namespace LibraryBox
                 lcd.ClearBottomText();
 
             }
-            else if(apiResponse.StatusCode == HttpStatusCode.InternalServerError)
+            else if(apiResponse.StatusCode == HttpStatusCode.Conflict)
             {
-                Console.WriteLine("Internal Server Error.");
-                lcd.WriteBottomText("Server Error");
+                Console.WriteLine("Book Exists.");
+                lcd.WriteBottomText("Book Exists");
                 await Task.Delay(3000);
                 lcd.ClearBottomText();
             }
