@@ -34,6 +34,7 @@ namespace LibraryBox
             ClearTopText();
             lcd.SetCursorPosition(0, 0);
             lcd.Write(topText);
+            lcd.SetCursorPosition(0, 1);
         }
         public void WriteBottomText(string bottomText)
         {

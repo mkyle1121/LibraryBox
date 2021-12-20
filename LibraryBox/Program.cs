@@ -37,7 +37,10 @@ namespace LibraryBox
                         case ConsoleKey.Enter:
                             continue;
                         case ConsoleKey.Backspace:
-                            ISBNInput = ISBNInput.Remove(ISBNInput.Length - 1);                            
+                            if(ISBNInput.Length > 0)
+                            {
+                                ISBNInput = ISBNInput.Remove(ISBNInput.Length - 1);
+                            }
                             break;
                         default:
                             ISBNInput += conKeyInfo.KeyChar;
@@ -59,10 +62,10 @@ namespace LibraryBox
 
                 switch(button.state.ToString())
                 {
-                    case "DEPOSIT":
+                    case "DEPOSIT_BOOK":
                         await StartToCreateBook(ISBNInput);
                         break;
-                    case "WITHDRAW":
+                    case "WITHDRAW_BOOK":
                         await DeleteBookById(ISBNInput, street);
                         break;
                     default:

@@ -13,13 +13,13 @@ namespace LibraryBox
         public Button()
         {
             controller = new GpioController();
-            state = State.DEPOSIT;
+            state = State.DEPOSIT_BOOK;
             OpenPin();
         }
         public enum State
         {
-            DEPOSIT,
-            WITHDRAW
+            DEPOSIT_BOOK,
+            WITHDRAW_BOOK
         }
         public virtual void OnButtonChange()
         {
@@ -41,12 +41,12 @@ namespace LibraryBox
                     {
                         switch(state)
                         {
-                            case State.DEPOSIT:
-                                state = State.WITHDRAW;
+                            case State.DEPOSIT_BOOK:
+                                state = State.WITHDRAW_BOOK;
                                 OnButtonChange();
                                 break;
-                            case State.WITHDRAW:
-                                state = State.DEPOSIT;
+                            case State.WITHDRAW_BOOK:
+                                state = State.DEPOSIT_BOOK;
                                 OnButtonChange();
                                 break;
                             default:
