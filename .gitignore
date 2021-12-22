@@ -362,4 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /LibraryBox/App.config
-/LibraryBoxLibrary/App.config
+/LibraryBoxWeb/appsettings.json
+
