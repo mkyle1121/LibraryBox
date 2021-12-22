@@ -1,4 +1,24 @@
 ﻿@page "/"
+@inherits IndexBase
 
-<h1>Hello, world!</h1>
-k
+<h1>Library Boxes!</h1>
+
+@if (AllBooks != null)
+{
+    <MudGrid>
+        <MudItem xs="12" Style="height:900px">
+
+            <RadzenGoogleMap Zoom=16 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick">
+                <Markers>
+                    <RadzenGoogleMapMarker Title="13300 Wisterwood St." Label="13300 Wisterwood St." Position=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474}) />
+
+                </Markers>
+            </RadzenGoogleMap>
+        </MudItem>
+    </MudGrid>
+}
+}
+
+
+
+
