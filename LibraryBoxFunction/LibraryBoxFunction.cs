@@ -17,6 +17,7 @@ namespace LibraryBoxFunction
         static string cosmosConnectionString = Environment.GetEnvironmentVariable("CosmosConnectionString");
         static string cosmosContainer = Environment.GetEnvironmentVariable("CosmosContainer");
         static string cosmosDatabase = Environment.GetEnvironmentVariable("CosmosDatabase");
+        static string cosmosContainerAddresses = Environment.GetEnvironmentVariable("CosmosContainerAddresses");
 
         [FunctionName("GetBookById")]
         public static async Task<IActionResult> GetBookById(
@@ -94,6 +95,24 @@ namespace LibraryBoxFunction
             try
             {
                 var response = container.GetItemLinqQueryable<Book>(true);                
+                return new OkObjectResult(response);
+            }
+            catch (CosmosException ex)
+            {
+                return new StatusCodeResult(500);
+            }
+        }
+
+        [FunctionName("GetAllAddresses")]
+        public static async Task<IActionResult> GetAllAddresses(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+        {
+            CosmosClient client = new CosmosClient(cosmosConnectionString);
+            Container container = client.GetContainer(cosmosDatabase, cosmosContainerAddresses);
+
+            try
+            {
+                var response = container.GetItemLinqQueryable<Address>(true);
                 return new OkObjectResult(response);
             }
             catch (CosmosException ex)
