@@ -1,4 +1,4 @@
-﻿namespace LibraryBoxFunction
+﻿namespace LibraryBoxWeb.Models
 {
     public class Book    
     {   
