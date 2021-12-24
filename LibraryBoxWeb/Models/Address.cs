@@ -3,7 +3,7 @@
     public class Address
     {
         public string address { get; set; }
-        public string lat { get; set; }
-        public string lng { get; set; }
+        public double lat { get; set; }
+        public double lng { get; set; }
     }
 }

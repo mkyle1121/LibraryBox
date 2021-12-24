@@ -13,7 +13,7 @@ namespace LibraryBox
         private static readonly string azureFunctionBaseEndpoint = ConfigurationManager.AppSettings.Get("AzureFunctionBaseEndpoint");
         private static readonly string isbnRetrievalEndpoint = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
         private static readonly string azureFunctionApiKey = ConfigurationManager.AppSettings.Get("AzureFunctionApiKey");
-        private static readonly string street = ConfigurationManager.AppSettings.Get("Street");       
+        private static readonly string address = ConfigurationManager.AppSettings.Get("Address");       
         private static LCD lcd;
         private static Button button;
         
@@ -66,7 +66,7 @@ namespace LibraryBox
                         await StartToCreateBook(ISBNInput);
                         break;
                     case "WITHDRAW_BOOK":
-                        await DeleteBookById(ISBNInput, street);
+                        await DeleteBookById(ISBNInput, address);
                         break;
                     default:
                         Console.WriteLine("Cannot Determine Button State.");
@@ -117,7 +117,7 @@ namespace LibraryBox
                 title = parsedBook["title"].ToString(),
                 isbn = ISBNInputCreate,
                 date = DateTime.Now.ToShortDateString(),
-                street = street
+                address = address
             };
 
             await CreateBook(book);            

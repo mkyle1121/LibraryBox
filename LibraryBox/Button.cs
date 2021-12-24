@@ -59,7 +59,6 @@ namespace LibraryBox
                         {
                             await Task.Delay(100);
                         }
-
                     }
                 }
             });            

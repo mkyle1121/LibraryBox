@@ -3,26 +3,21 @@
 
 <h1>Library Boxes!</h1>
 
-
-
-@if (AllBooks != null)
+@if(ListOfAddresses != null)
 {
-    @foreach(var item in AllBooks)
+<MudGrid>
+    <MudItem xs="12" Style="height:900px">        
+        <RadzenGoogleMap Zoom=18 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@googleMapsApiKey">            
+            <Markers>
+                @foreach(var address in ListOfAddresses)
                 {
-                    @item
-        <MudDivider/>
+                    <RadzenGoogleMapMarker Title=@address.address Label=@address.address Position=@(new GoogleMapPosition() { Lat = address.lat, Lng = address.lng}) />
                 }
-
-    <MudGrid>
-        <MudItem xs="12" Style="height:900px">
-            <RadzenGoogleMap Zoom=16 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@googleMapsApiKey">
-                <Markers>
-                    <RadzenGoogleMapMarker Title="13300 Wisterwood St." Label="13300 Wisterwood St." Position=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474}) />
-
-                </Markers>
-            </RadzenGoogleMap>
-        </MudItem>
-    </MudGrid>
+            </Markers>            
+        </RadzenGoogleMap>
+        
+    </MudItem>
+</MudGrid>
 }
 
 
