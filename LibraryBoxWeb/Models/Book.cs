@@ -7,6 +7,6 @@
         public string title { get; set; }
         public string isbn { get; set; }
         public string date { get; set; }
-        public string street { get; set; }
+        public string address { get; set; }
     }
 }

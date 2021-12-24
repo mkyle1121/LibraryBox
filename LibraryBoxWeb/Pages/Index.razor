@@ -11,7 +11,7 @@
             <Markers>
                 @foreach(var address in ListOfAddresses)
                 {
-                    <RadzenGoogleMapMarker Title=@address.address Label=@address.address Position=@(new GoogleMapPosition() { Lat = address.lat, Lng = address.lng}) />
+                    <RadzenGoogleMapMarker Title=@address.address Label=@address.address Position=@(new GoogleMapPosition() { Lat = address.lat, Lng = address.lng}) />                   
                 }
             </Markers>            
         </RadzenGoogleMap>

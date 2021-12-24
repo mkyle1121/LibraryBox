@@ -16,10 +16,11 @@ namespace LibraryBoxWeb.Pages
     {
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
-        public List<Address> ListOfAddresses { get; set; }
-        public List<Book> ListOfBooks { get; set; }
-
+        public List<Address> ListOfAddresses { get; set; }       
         public string googleMapsApiKey { get; set; }
+        public string markerClickTitle { get; set; }
+        public List<Book> markerClickAddressListOfBooks { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             var configuration = Configuration;            
@@ -27,17 +28,10 @@ namespace LibraryBoxWeb.Pages
             string azureFunctionBaseEndpoint = configuration["AzureFunctionBaseEndpoint"];
             googleMapsApiKey = configuration["GoogleMapsApiKey"];
             ListOfAddresses = new List<Address>();
-            ListOfBooks = new List<Book>();
+            
 
             HttpClient client = new HttpClient();
-            string response = await client.GetStringAsync($"{azureFunctionBaseEndpoint}GetAllBooks?code={azureFunctionApiKey}");
-            JToken AllBooks = JArray.Parse(response);
-            foreach (var book in AllBooks)
-            {
-                ListOfBooks.Add(book.ToObject<Book>());
-            }
-
-            response = await client.GetStringAsync($"{azureFunctionBaseEndpoint}GetAllAddresses?code={azureFunctionApiKey}");
+            string response = await client.GetStringAsync($"{azureFunctionBaseEndpoint}GetAllAddresses?code={azureFunctionApiKey}");
             JToken AllAddresses = JArray.Parse(response);
             foreach (var address in AllAddresses)
             {
@@ -47,10 +41,10 @@ namespace LibraryBoxWeb.Pages
 
         public async Task OnMarkerClick(RadzenGoogleMapMarker marker)
         {
-            string address = marker.Title;
-            var temp = ListOfBooks.Where(book => book.street == "wisterwood").ToList();
-            bool? result = await DialogService.ShowMessageBox(address, temp.ToString(), yesText: "Ok!");
-            StateHasChanged();
-        }
+            markerClickTitle = marker.Title;
+            DialogParameters dialogParameters = new DialogParameters();
+            dialogParameters.Add("markerClickTitle", markerClickTitle);
+            var result = await DialogService.Show<Dialog>(markerClickTitle, dialogParameters).Result;
+        }     
     }
 }

@@ -1,0 +1,24 @@
+﻿@inherits DialogBase
+
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+            <MudText Style="white-space: pre-wrap;">
+                @if (finishedLoading)
+                {
+                    @foreach (var book in markerClickAddressListOfBooks)
+                    {
+                        <MudDivider />
+                        @book.title<br />
+                        @book.author<br />
+                        @book.isbn<br />
+                        @book.date<br />
+                    }
+                }
+            </MudText>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="CloseDialog">Accept</MudButton>
+    </DialogActions>
+</MudDialog>

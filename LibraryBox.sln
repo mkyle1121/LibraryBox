@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryBox", "LibraryBox\Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryBoxFunction", "LibraryBoxFunction\LibraryBoxFunction.csproj", "{B5192B20-8911-41F0-93EB-E1665EA7B7EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryBoxWeb", "LibraryBoxWeb\LibraryBoxWeb.csproj", "{2EFF6331-0D07-4D6B-93FF-5E488B3B6ED5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryBoxWeb", "LibraryBoxWeb\LibraryBoxWeb.csproj", "{2EFF6331-0D07-4D6B-93FF-5E488B3B6ED5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
