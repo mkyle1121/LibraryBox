@@ -1,12 +1,10 @@
 ﻿@page "/"
 @inherits IndexBase
 
-<h1>Library Boxes!</h1>
-
 @if(ListOfAddresses != null)
 {
 <MudGrid>
-    <MudItem xs="12" Style="height:900px">        
+    <MudItem xs="12" Style="height:800px">        
         <RadzenGoogleMap Zoom=18 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@googleMapsApiKey">            
             <Markers>
                 @foreach(var address in ListOfAddresses)

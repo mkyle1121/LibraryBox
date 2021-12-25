@@ -2,23 +2,23 @@
 
 <MudDialog DisableSidePadding="true">
     <DialogContent>
-        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+        <MudContainer Style="overflow-y: scroll">
             <MudText Style="white-space: pre-wrap;">
-                @if (finishedLoading)
-                {
-                    @foreach (var book in markerClickAddressListOfBooks)
-                    {
-                        <MudDivider />
-                        @book.title<br />
-                        @book.author<br />
-                        @book.isbn<br />
-                        @book.date<br />
-                    }
-                }
+                <MudDivider/>
+                <MudTable Elevation="4" Items="@markerClickListOfBooks" FixedHeader=true>
+                    <HeaderContent>
+                        <MudTh>Title</MudTh>
+                        <MudTh>Author</MudTh>                     
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Title">@context.title</MudTd>
+                        <MudTd DataLabel="Author">@context.author</MudTd>
+                    </RowTemplate>                                      
+                </MudTable>                               
             </MudText>
         </MudContainer>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Primary" OnClick="CloseDialog">Accept</MudButton>
+        <MudButton Color="Color.Primary" OnClick="CloseDialog">Close</MudButton>
     </DialogActions>
 </MudDialog>

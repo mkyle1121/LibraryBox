@@ -16,11 +16,9 @@ namespace LibraryBoxWeb.Pages
     {
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
-        public List<Address> ListOfAddresses { get; set; }       
+        public List<Address> ListOfAddresses { get; set; }
+        public List<Book> ListOfBooks { get; set; }
         public string googleMapsApiKey { get; set; }
-        public string markerClickTitle { get; set; }
-        public List<Book> markerClickAddressListOfBooks { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
             var configuration = Configuration;            
@@ -28,23 +26,34 @@ namespace LibraryBoxWeb.Pages
             string azureFunctionBaseEndpoint = configuration["AzureFunctionBaseEndpoint"];
             googleMapsApiKey = configuration["GoogleMapsApiKey"];
             ListOfAddresses = new List<Address>();
-            
+            ListOfBooks = new List<Book>();
 
             HttpClient client = new HttpClient();
             string response = await client.GetStringAsync($"{azureFunctionBaseEndpoint}GetAllAddresses?code={azureFunctionApiKey}");
             JToken AllAddresses = JArray.Parse(response);
-            foreach (var address in AllAddresses)
+            foreach(var address in AllAddresses)
             {
                 ListOfAddresses.Add(address.ToObject<Address>());
+            }
+
+            response = await client.GetStringAsync($"{azureFunctionBaseEndpoint}GetAllBooks?code={azureFunctionApiKey}");
+            JToken AllBooks = JArray.Parse(response);
+            foreach(var book in AllBooks)
+            {
+                ListOfBooks.Add(book.ToObject<Book>());
             }
         }
 
         public async Task OnMarkerClick(RadzenGoogleMapMarker marker)
         {
-            markerClickTitle = marker.Title;
+            string markerClickTitleAddress = marker.Title;
+            List<Book> markerClickListOfBooks = ListOfBooks.Where(book => book.address == markerClickTitleAddress).ToList();
+
             DialogParameters dialogParameters = new DialogParameters();
-            dialogParameters.Add("markerClickTitle", markerClickTitle);
-            var result = await DialogService.Show<Dialog>(markerClickTitle, dialogParameters).Result;
+            dialogParameters.Add("markerClickTitleAddress", markerClickTitleAddress);
+            dialogParameters.Add("markerClickListOfBooks", markerClickListOfBooks);
+
+            var result = await DialogService.Show<Dialog>(markerClickTitleAddress, dialogParameters).Result;
         }     
     }
 }
