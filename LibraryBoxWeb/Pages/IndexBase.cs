@@ -46,8 +46,9 @@ namespace LibraryBoxWeb.Pages
 
         public async Task OnMarkerClick(RadzenGoogleMapMarker marker)
         {
+
             string markerClickTitleAddress = marker.Title;
-            List<Book> markerClickListOfBooks = ListOfBooks.Where(book => book.address == markerClickTitleAddress).ToList();
+            List<Book> markerClickListOfBooks = ListOfBooks.Where(book => book.address == markerClickTitleAddress).OrderBy(book => book.title).ToList();
 
             DialogParameters dialogParameters = new DialogParameters();
             dialogParameters.Add("markerClickTitleAddress", markerClickTitleAddress);

@@ -7,8 +7,10 @@ namespace LibraryBox
     public class Button
     {
         private GpioController controller;
+
         private int buttonInputPin = 22;
         public State state { get; set; }
+
         public event EventHandler ButtonChange;
         public Button()
         {
@@ -50,7 +52,7 @@ namespace LibraryBox
                                 OnButtonChange();
                                 break;
                             default:
-                                Console.WriteLine("Uknown State.");
+                                Console.WriteLine("Unknown State.");
                                 break;
                         }                        
                         Console.WriteLine($"Button Was Pressed. Value = {state}");
