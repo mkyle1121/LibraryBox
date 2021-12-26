@@ -2,17 +2,21 @@
 
 <MudDialog DisableSidePadding="true">
     <DialogContent>
-        <MudContainer Style="overflow-y: scroll">
+        <MudContainer Style="max-height: 400px; overflow-y: scroll">
             <MudText Style="white-space: pre-wrap;">
                 <MudDivider/>
                 <MudTable Hover="true" Elevation="4" Items="@markerClickListOfBooks" FixedHeader=true>
                     <HeaderContent>
+                        <MudTh>Cover</MudTh>
                         <MudTh>Title</MudTh>
-                        <MudTh>Author</MudTh>                     
+                        <MudTh>Author</MudTh>  
+                        <MudTh>Category</MudTh>
                     </HeaderContent>
                     <RowTemplate>
+                        <MudTd DataLabel="Cover"><img src="@context.smallThumbnail" /></MudTd>
                         <MudTd DataLabel="Title">@context.title</MudTd>
                         <MudTd DataLabel="Author">@context.author</MudTd>
+                        <MudTd DataLabel="Category">@context.category</MudTd>
                     </RowTemplate>                                      
                 </MudTable>                               
             </MudText>

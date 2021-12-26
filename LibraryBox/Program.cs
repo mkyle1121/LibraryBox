@@ -113,9 +113,11 @@ namespace LibraryBox
             Book book = new Book
             {
                 id = ISBNInputCreate,
-                author = parsedBook["authors"][0].ToString(),
-                title = parsedBook["title"].ToString(),
+                author = parsedBook["authors"] == null ? string.Empty : parsedBook["authors"][0].ToString(),
+                title = parsedBook["title"] == null ? string.Empty : parsedBook["title"].ToString(),
                 isbn = ISBNInputCreate,
+                category = parsedBook["categories"] == null ? string.Empty : parsedBook["categories"][0].ToString(),
+                smallThumbnail = parsedBook["imageLinks"] == null ? string.Empty : parsedBook["imageLinks"]["smallThumbnail"].ToString(),
                 date = DateTime.Now.ToShortDateString(),
                 address = address
             };
