@@ -45,11 +45,11 @@ namespace LibraryBoxWeb.Pages
                 ListOfBooks.Add(book.ToObject<Book>());
             }
             Loading = false;
+            StateHasChanged();
         }
 
         public async Task OnMarkerClick(RadzenGoogleMapMarker marker)
         {
-
             string markerClickTitleAddress = marker.Title;
             List<Book> markerClickListOfBooks = ListOfBooks.Where(book => book.address == markerClickTitleAddress).OrderBy(book => book.title).ToList();
 
