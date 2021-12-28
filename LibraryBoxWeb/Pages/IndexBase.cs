@@ -19,6 +19,7 @@ namespace LibraryBoxWeb.Pages
         public List<Address> ListOfAddresses { get; set; }
         public List<Book> ListOfBooks { get; set; }
         public string googleMapsApiKey { get; set; }
+        public bool Loading { get; set; }
         protected override async Task OnInitializedAsync()
         {
             var configuration = Configuration;            
@@ -28,6 +29,7 @@ namespace LibraryBoxWeb.Pages
             ListOfAddresses = new List<Address>();
             ListOfBooks = new List<Book>();
 
+            Loading = true;
             HttpClient client = new HttpClient();
             string response = await client.GetStringAsync($"{azureFunctionBaseEndpoint}GetAllAddresses?code={azureFunctionApiKey}");
             JToken AllAddresses = JArray.Parse(response);
@@ -42,6 +44,7 @@ namespace LibraryBoxWeb.Pages
             {
                 ListOfBooks.Add(book.ToObject<Book>());
             }
+            Loading = false;
         }
 
         public async Task OnMarkerClick(RadzenGoogleMapMarker marker)

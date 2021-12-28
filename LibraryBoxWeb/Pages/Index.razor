@@ -7,9 +7,16 @@
     <MudItem xs="12" Style="height:800px">        
         <RadzenGoogleMap Zoom=18 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@googleMapsApiKey">            
             <Markers>
-                @foreach(var address in ListOfAddresses)
+                @if (!Loading)
                 {
-                    <RadzenGoogleMapMarker Title=@address.address Label=@address.address Position=@(new GoogleMapPosition() { Lat = address.lat, Lng = address.lng}) />                   
+                    @foreach (var address in ListOfAddresses)
+                    {
+                        <RadzenGoogleMapMarker Title=@address.address Label=@address.address Position=@(new GoogleMapPosition() { Lat = address.lat, Lng = address.lng }) />
+                    }
+                }
+                else
+                {
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
                 }
             </Markers>            
         </RadzenGoogleMap>
