@@ -73,7 +73,8 @@ namespace LibraryBox
                         break;
                 }               
             }           
-        }              
+        } 
+        
         private static async Task StartToCreateBook(string ISBNInputCreate)
         {
             string content = string.Empty;
@@ -188,6 +189,7 @@ namespace LibraryBox
                 lcd.ClearBottomText();
             }
         }
+
         private static void OnButtonChange(object sender, EventArgs args)
         {
             lcd.WriteTopText(button.state.ToString());

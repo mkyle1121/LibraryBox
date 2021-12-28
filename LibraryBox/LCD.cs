@@ -29,6 +29,7 @@ namespace LibraryBox
             lcd.BlinkingCursorVisible = true;
             Console.WriteLine("LCD Display Started.");
         }
+
         public void WriteTopText(string topText)
         {
             ClearTopText();
@@ -36,6 +37,7 @@ namespace LibraryBox
             lcd.Write(topText);
             lcd.SetCursorPosition(0, 1);
         }
+
         public void WriteBottomText(string bottomText)
         {
             ClearBottomText();
@@ -43,10 +45,6 @@ namespace LibraryBox
             lcd.Write(bottomText);            
         }       
 
-        public void Clear()
-        {
-            lcd.Clear();            
-        }
         public void ClearTopText()
         {
             lcd.SetCursorPosition(0, 0);

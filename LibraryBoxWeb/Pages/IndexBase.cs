@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -45,6 +44,7 @@ namespace LibraryBoxWeb.Pages
                 ListOfBooks.Add(book.ToObject<Book>());
             }
             Loading = false;
+            await Task.Delay(1000); //Map markers wouldn't show up on initial load.  Needed to wait for something but not sure.... javascript?
             StateHasChanged();
         }
 
