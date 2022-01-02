@@ -5,7 +5,7 @@
         <MudContainer Style="max-height: 400px; overflow-y: scroll">
             <MudText Style="white-space: pre-wrap;">
                 <MudDivider/>
-                <MudTable Hover="true" Elevation="4" Items="@markerClickListOfBooks" FixedHeader=true>
+                <MudTable Hover="true" Elevation="4" Items="@MarkerClickListOfBooks" FixedHeader=true>
                     <HeaderContent>
                         <MudTh>Cover</MudTh>
                         <MudTh>Title</MudTh>
@@ -13,10 +13,10 @@
                         <MudTh>Category</MudTh>
                     </HeaderContent>
                     <RowTemplate>
-                        <MudTd DataLabel="Cover"><a href=""><img src="@context.smallThumbnail" /></a></MudTd>
-                        <MudTd DataLabel="Title">@context.title</MudTd>
-                        <MudTd DataLabel="Author">@context.author</MudTd>
-                        <MudTd DataLabel="Category">@context.category</MudTd>
+                        <MudTd DataLabel="Cover"><a href=""><img src="@context.SmallThumbnail" /></a></MudTd>
+                        <MudTd DataLabel="Title">@context.Title</MudTd>
+                        <MudTd DataLabel="Author">@context.Author</MudTd>
+                        <MudTd DataLabel="Category">@context.Category</MudTd>
                     </RowTemplate>                                      
                 </MudTable>                               
             </MudText>

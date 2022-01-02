@@ -13,8 +13,8 @@ namespace LibraryBoxWeb.Pages
     public class DialogBase : ComponentBase
     {
         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-        [Parameter] public List<Book> markerClickListOfBooks { get; set; }
-        [Parameter] public string markerClickTitleAddress { get; set; }        
+        [Parameter] public List<Book> MarkerClickListOfBooks { get; set; }
+        [Parameter] public string MarkerClickTitleAddress { get; set; }        
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();            

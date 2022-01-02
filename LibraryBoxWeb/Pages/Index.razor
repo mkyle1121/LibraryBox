@@ -5,13 +5,13 @@
 {
 <MudGrid>
     <MudItem xs="12" Style="height:800px">        
-        <RadzenGoogleMap Zoom=18 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@googleMapsApiKey">            
+        <RadzenGoogleMap Zoom=18 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@GoogleMapsApiKey">            
             <Markers>
                 @if (!Loading)
                 {
                     @foreach (var address in ListOfAddresses)
                     {
-                        <RadzenGoogleMapMarker Title=@address.address Label=@address.address Position=@(new GoogleMapPosition() { Lat = address.lat, Lng = address.lng }) />
+                        <RadzenGoogleMapMarker Title=@address.Address Label=@address.Address Position=@(new GoogleMapPosition() { Lat = address.Lat, Lng = address.Lng }) />
                     }
                 }
                 else

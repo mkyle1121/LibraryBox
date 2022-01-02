@@ -2,13 +2,13 @@
 {
     public class Book    
     {   
-        public string id { get; set; }
-        public string author { get; set; }
-        public string title { get; set; }
-        public string isbn { get; set; }
-        public string category { get; set; }
-        public string smallThumbnail { get; set; }
-        public string date { get; set; }
-        public string address { get; set; }
+        public string Id { get; set; }
+        public string Author { get; set; }
+        public string Title { get; set; }
+        public string Isbn { get; set; }
+        public string Category { get; set; }
+        public string SmallThumbnail { get; set; }
+        public string Date { get; set; }
+        public string Address { get; set; }
     }
 }

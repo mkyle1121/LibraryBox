@@ -15,17 +15,17 @@ namespace LibraryBoxWeb.Pages
     {
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
-        public List<Address> ListOfAddresses { get; set; }
+        public List<Addresses> ListOfAddresses { get; set; }
         public List<Book> ListOfBooks { get; set; }
-        public string googleMapsApiKey { get; set; }
+        public string GoogleMapsApiKey { get; set; }
         public bool Loading { get; set; }
         protected override async Task OnInitializedAsync()
         {
             var configuration = Configuration;            
             string azureFunctionApiKey = configuration["AzureFunctionApiKey"];
             string azureFunctionBaseEndpoint = configuration["AzureFunctionBaseEndpoint"];
-            googleMapsApiKey = configuration["GoogleMapsApiKey"];
-            ListOfAddresses = new List<Address>();
+            GoogleMapsApiKey = configuration["GoogleMapsApiKey"];
+            ListOfAddresses = new List<Addresses>();
             ListOfBooks = new List<Book>();
 
             Loading = true;
@@ -34,7 +34,7 @@ namespace LibraryBoxWeb.Pages
             JToken AllAddresses = JArray.Parse(response);
             foreach(var address in AllAddresses)
             {
-                ListOfAddresses.Add(address.ToObject<Address>());
+                ListOfAddresses.Add(address.ToObject<Addresses>());
             }
 
             response = await client.GetStringAsync($"{azureFunctionBaseEndpoint}GetAllBooks?code={azureFunctionApiKey}");
@@ -51,7 +51,7 @@ namespace LibraryBoxWeb.Pages
         public async Task OnMarkerClick(RadzenGoogleMapMarker marker)
         {
             string markerClickTitleAddress = marker.Title;
-            List<Book> markerClickListOfBooks = ListOfBooks.Where(book => book.address == markerClickTitleAddress).OrderBy(book => book.title).ToList();
+            List<Book> markerClickListOfBooks = ListOfBooks.Where(book => book.Address == markerClickTitleAddress).OrderBy(book => book.Title).ToList();
 
             DialogParameters dialogParameters = new DialogParameters();
             dialogParameters.Add("markerClickTitleAddress", markerClickTitleAddress);

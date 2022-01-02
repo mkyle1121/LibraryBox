@@ -1,6 +1,6 @@
 ﻿namespace LibraryBoxFunction
 {
-    public class Address
+    public class Addresses
     {
         public string address { get; set; }
         public double lat { get; set; }

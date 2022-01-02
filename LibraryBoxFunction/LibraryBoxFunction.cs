@@ -75,7 +75,7 @@ namespace LibraryBoxFunction
 
             try
             {
-                ItemResponse<Book> response = await container.CreateItemAsync<Book>(book, new PartitionKey(book.address));
+                ItemResponse<Book> response = await container.CreateItemAsync<Book>(book, new PartitionKey(book.Address));
                 return new StatusCodeResult(201);
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
@@ -112,7 +112,7 @@ namespace LibraryBoxFunction
 
             try
             {
-                var response = container.GetItemLinqQueryable<Address>(true);
+                var response = container.GetItemLinqQueryable<Addresses>(true);
                 return new OkObjectResult(response);
             }
             catch (CosmosException ex)
