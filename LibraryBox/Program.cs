@@ -113,7 +113,7 @@ namespace LibraryBox
 
             Book book = new Book
             {
-                Id = ISBNInputCreate,
+                id = ISBNInputCreate,
                 Author = parsedBook["authors"] == null ? string.Empty : parsedBook["authors"][0].ToString(),
                 Title = parsedBook["title"] == null ? string.Empty : parsedBook["title"].ToString(),
                 Isbn = ISBNInputCreate,
