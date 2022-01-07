@@ -34,7 +34,7 @@ namespace LibraryBoxFunction
             {
                 ItemResponse<Book> response = await container.ReadItemAsync<Book>(id, new PartitionKey(partitionKey));
                 Book book = response.Resource;
-                return new OkObjectResult(book);
+                return new OkObjectResult(book);                
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
@@ -56,10 +56,13 @@ namespace LibraryBoxFunction
             {
                 ItemResponse<Book> response = await container.DeleteItemAsync<Book>(id, new PartitionKey(partitionKey));                
                 return new OkResult();
+                log.LogInformation($"Deleted Book: {id} from {partitionKey}.");
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
                 return new NotFoundResult();
+                log.LogError(ex.Message);
+                log.LogError($"Error Deleting Book: {id} from {partitionKey}.");
             }
         }
 
@@ -77,12 +80,16 @@ namespace LibraryBoxFunction
             {
                 ItemResponse<Book> response = await container.CreateItemAsync<Book>(book, new PartitionKey(book.Address));
                 return new StatusCodeResult(201);
+                log.LogInformation($"Created Book: {requestBody}.");
+
+
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
             {                
                 return new StatusCodeResult(409);
+                log.LogError(ex.Message);
+                log.LogError($"Error Creating Book: {requestBody}.");
             }
-
         }
 
         [FunctionName("GetAllBooks")]
@@ -100,6 +107,8 @@ namespace LibraryBoxFunction
             catch (CosmosException ex)
             {
                 return new StatusCodeResult(500);
+                log.LogError(ex.Message);
+                log.LogError("Error Returning All Books.");
             }
         }
 
@@ -118,6 +127,8 @@ namespace LibraryBoxFunction
             catch (CosmosException ex)
             {
                 return new StatusCodeResult(500);
+                log.LogError(ex.Message);
+                log.LogError("Error Returning All Addresses.");
             }
         }
     }
