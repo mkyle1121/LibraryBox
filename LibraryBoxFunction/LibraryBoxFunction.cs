@@ -60,9 +60,9 @@ namespace LibraryBoxFunction
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                return new NotFoundResult();
                 log.LogError(ex.Message);
                 log.LogError($"Error Deleting Book: {id} from {partitionKey}.");
+                return new NotFoundResult();                
             }
         }
 
@@ -85,10 +85,10 @@ namespace LibraryBoxFunction
 
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
-            {                
-                return new StatusCodeResult(409);
+            {
                 log.LogError(ex.Message);
                 log.LogError($"Error Creating Book: {requestBody}.");
+                return new StatusCodeResult(409);                
             }
         }
 
@@ -106,9 +106,9 @@ namespace LibraryBoxFunction
             }
             catch (CosmosException ex)
             {
-                return new StatusCodeResult(500);
                 log.LogError(ex.Message);
                 log.LogError("Error Returning All Books.");
+                return new StatusCodeResult(500);                
             }
         }
 
@@ -126,9 +126,9 @@ namespace LibraryBoxFunction
             }
             catch (CosmosException ex)
             {
-                return new StatusCodeResult(500);
                 log.LogError(ex.Message);
                 log.LogError("Error Returning All Addresses.");
+                return new StatusCodeResult(500);                
             }
         }
     }
