@@ -54,15 +54,21 @@ namespace LibraryBoxFunction
 
             try
             {
-                ItemResponse<Book> response = await container.DeleteItemAsync<Book>(id, new PartitionKey(partitionKey));                
-                return new OkResult();
-                log.LogInformation($"Deleted Book: {id} from {partitionKey}.");
+                ItemResponse<Book> response = await container.DeleteItemAsync<Book>(id, new PartitionKey(partitionKey));
+                log.LogTrace($"Deleted Book: {id} from {partitionKey}.");
+                return new OkResult();                
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
                 log.LogError(ex.Message);
-                log.LogError($"Error Deleting Book: {id} from {partitionKey}.");
+                log.LogError($"Error Deleting Book.  Not Found: {id} from {partitionKey}.");
                 return new NotFoundResult();                
+            }
+            catch (CosmosException ex)
+            {
+                log.LogError(ex.Message);
+                log.LogError($"Error Deleting Book: {id} from {partitionKey}.");
+                return new StatusCodeResult(500);
             }
         }
 
@@ -79,16 +85,20 @@ namespace LibraryBoxFunction
             try
             {
                 ItemResponse<Book> response = await container.CreateItemAsync<Book>(book, new PartitionKey(book.Address));
-                return new StatusCodeResult(201);
-                log.LogInformation($"Created Book: {requestBody}.");
-
-
+                log.LogTrace($"Created Book: {requestBody}.");
+                return new StatusCodeResult(201);             
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
             {
                 log.LogError(ex.Message);
-                log.LogError($"Error Creating Book: {requestBody}.");
+                log.LogError($"Book Already Exists: {requestBody}.");
                 return new StatusCodeResult(409);                
+            }
+            catch (CosmosException ex)
+            {
+                log.LogError(ex.Message);
+                log.LogError($"Error Creating Book: {requestBody}.");
+                return new StatusCodeResult(500);
             }
         }
 
