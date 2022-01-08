@@ -55,7 +55,7 @@ namespace LibraryBoxFunction
             try
             {
                 ItemResponse<Book> response = await container.DeleteItemAsync<Book>(id, new PartitionKey(partitionKey));
-                log.LogTrace($"Deleted Book: {id} from {partitionKey}.");
+                log.LogInformation($"Deleted Book: {id} from {partitionKey}.");
                 return new OkResult();                
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -84,8 +84,8 @@ namespace LibraryBoxFunction
 
             try
             {
-                ItemResponse<Book> response = await container.CreateItemAsync<Book>(book, new PartitionKey(book.Address));
-                log.LogTrace($"Created Book: {requestBody}.");
+                ItemResponse<Book> response = await container.CreateItemAsync<Book>(book, new PartitionKey(book.Address));                
+                log.LogInformation($"Created Book: {requestBody}.");
                 return new StatusCodeResult(201);             
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
