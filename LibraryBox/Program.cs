@@ -134,7 +134,8 @@ namespace LibraryBox
             Console.WriteLine(bookContent);
 
             HttpContent httpContent = new StringContent(bookContent);
-            HttpClient client = new HttpClient();            
+            HttpClient client = new HttpClient();
+            lcd.WriteBottomText("Depositing...");
             HttpResponseMessage apiResponse = await client.PostAsync(apiEndpointCreateBook, httpContent);
             if(apiResponse.StatusCode == HttpStatusCode.Created)
             {
@@ -164,7 +165,7 @@ namespace LibraryBox
         {
             string apiEndpointDeleteBookById = $"{azureFunctionBaseEndpoint}DeleteBookById?code={azureFunctionApiKey}&id={id}&partitionKey={partitionKey}";
             HttpClient client = new HttpClient();
-            
+            lcd.WriteBottomText("Checking...");
             HttpResponseMessage apiResponse = await client.DeleteAsync(apiEndpointDeleteBookById);
             if(apiResponse.StatusCode == HttpStatusCode.OK)
             {
