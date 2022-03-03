@@ -4,8 +4,8 @@
     <DialogContent>
         <MudContainer Style="max-height: 400px; overflow-y: scroll">
             <MudText Style="white-space: pre-wrap;">
-                <MudDivider/>
-                <MudTable Hover="true" Elevation="4" Items="@MarkerClickListOfBooks" FixedHeader=true>
+                <MudDivider/>                
+                <MudTable Bordered="true"  Hover="true" Elevation="4" Items="@MarkerClickListOfBooks" FixedHeader=true Dense="true">
                     <HeaderContent>
                         <MudTh>Cover</MudTh>
                         <MudTh>Title</MudTh>
@@ -23,6 +23,6 @@
         </MudContainer>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Primary" OnClick="CloseDialog">Close</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Outlined" OnClick="CloseDialog">Close</MudButton>
     </DialogActions>
 </MudDialog>
