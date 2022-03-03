@@ -4,12 +4,27 @@
 <RadzenNotification />
 <RadzenContextMenu />
 <RadzenTooltip />
+<MudSnackbarProvider />
 
 <MudThemeProvider Theme="darkTheme" />
 
 <MudLayout>
-    <MudAppBar Dense="true"> 
-        LibraryBoxMap.com
+    <MudAppBar Dense="true">
+
+        <MudLink Href="/">
+            <MudButton Variant="Variant.Filled">LibraryBoxMap.com</MudButton>
+        </MudLink>
+
+        <MudSpacer />
+
+        <MudLink Href="https://www.themikekyle.com/cool-stuff/librarybox">
+            <MudButton Variant="Variant.Filled">Build Your Own LibraryBox</MudButton>
+        </MudLink>
+
+        <MudLink Href="https://docs.google.com/forms/d/e/1FAIpQLSedIb-lY5DxlgHThYJk6cA__BodBYdr49JK9oXMNfKbg-OqkA/viewform?usp=pp_url">
+            <MudButton Variant="Variant.Filled">Feedback</MudButton>
+        </MudLink>
+
     </MudAppBar>
 
     <MudMainContent>
@@ -24,6 +39,8 @@
     {
         Palette = new Palette()
         {
+            Primary = Colors.DeepOrange.Default,
+            Secondary = Colors.BlueGrey.Default,
             Black = "#27272f",
             Background = "#32333d",
             BackgroundGrey = "#27272f",

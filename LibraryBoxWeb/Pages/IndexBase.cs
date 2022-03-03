@@ -15,18 +15,26 @@ namespace LibraryBoxWeb.Pages
     {
         [Inject] private IConfiguration Configuration { get; set; }
         [Inject] private IDialogService DialogService { get; set; }
+        [Inject] private ISnackbar SnackbarService { get; set; }
         public List<Addresses> ListOfAddresses { get; set; }
         public List<Book> ListOfBooks { get; set; }
         public string GoogleMapsApiKey { get; set; }
         public bool Loading { get; set; }
         protected override async Task OnInitializedAsync()
-        {
+        {         
             var configuration = Configuration;            
             string azureFunctionApiKey = configuration["AzureFunctionApiKey"];
             string azureFunctionBaseEndpoint = configuration["AzureFunctionBaseEndpoint"];
             GoogleMapsApiKey = configuration["GoogleMapsApiKey"];
             ListOfAddresses = new List<Addresses>();
             ListOfBooks = new List<Book>();
+
+            SnackbarService.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+            SnackbarService.Configuration.VisibleStateDuration = 7000;
+            SnackbarService.Configuration.HideTransitionDuration = 250;
+            SnackbarService.Configuration.ShowTransitionDuration = 250;
+            SnackbarService.Configuration.PreventDuplicates = false;
+            SnackbarService.Add("Click A Marker To View Books!", Severity.Success);
 
             Loading = true;
             HttpClient client = new HttpClient();
@@ -58,6 +66,9 @@ namespace LibraryBoxWeb.Pages
             dialogParameters.Add("markerClickListOfBooks", markerClickListOfBooks);
 
             var result = await DialogService.Show<Dialog>(markerClickTitleAddress, dialogParameters).Result;
-        }     
+        }
+        
+
+
     }
 }

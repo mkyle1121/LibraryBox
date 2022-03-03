@@ -1,28 +1,28 @@
 ﻿@page "/"
 @inherits IndexBase
 
-@if(ListOfAddresses != null)
+@if (ListOfAddresses != null)
 {
-<MudGrid>
-    <MudItem xs="12" Style="height:800px">        
-        <RadzenGoogleMap Zoom=18 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@GoogleMapsApiKey">            
-            <Markers>
-                @if (!Loading)
-                {
-                    @foreach (var address in ListOfAddresses)
+    <MudGrid>
+        <MudItem xs="12" Style="height:800px">
+            <RadzenGoogleMap Zoom=18 Center=@(new GoogleMapPosition() { Lat = 30.463961406970004, Lng = -97.77925868219474 }) MarkerClick="@OnMarkerClick" ApiKey="@GoogleMapsApiKey">
+                <Markers>
+                    @if (!Loading)
                     {
-                        <RadzenGoogleMapMarker Title=@address.Address Label=@address.Address Position=@(new GoogleMapPosition() { Lat = address.Lat, Lng = address.Lng }) />
+                        @foreach (var address in ListOfAddresses)
+                        {
+                            <RadzenGoogleMapMarker Title=@address.Address Label=@address.Address Position=@(new GoogleMapPosition() { Lat = address.Lat, Lng = address.Lng }) />
+                        }
                     }
-                }
-                else
-                {
-                    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-                }
-            </Markers>            
-        </RadzenGoogleMap>
-        
-    </MudItem>
-</MudGrid>
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                    }
+                </Markers>
+            </RadzenGoogleMap>
+
+        </MudItem>
+    </MudGrid>
 }
 
 
